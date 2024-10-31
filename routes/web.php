@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\WeightController;
+use App\Http\Controllers\OrderController as ControllersOrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('Client.checkout');
 });
-Route::post('/orders/store', [OrderController::class, 'storeOrder'])->name('orders.storeOrder');
+Route::post('/orders/store', [ControllersOrderController::class, 'storeOrder'])->name('orders.storeOrder');
 
 
 Route::prefix('admin/sliders')->name('sliders.')->group(function () {

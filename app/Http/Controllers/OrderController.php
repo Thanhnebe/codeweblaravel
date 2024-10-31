@@ -12,6 +12,7 @@ class OrderController extends Controller
 {
     public function storeOrder(Request $request)
     {
+
         // Validate the incoming request data
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -21,6 +22,8 @@ class OrderController extends Controller
             'phone' => 'required|string',
             'products' => 'required|array',
             'payment_method' => 'required|string',
+            'code' => 'required|string',
+            'email' => 'required|email',
         ]);
 
         // Create a new order
@@ -31,17 +34,22 @@ class OrderController extends Controller
             'name' => $validatedData['name'],
             'address' => $validatedData['address'],
             'phone' => $validatedData['phone'],
-            'payment_method' => $validatedData['payment_method'],
+            'code' => $validatedData['code'],
+            'payment_method' => $validatedData['payment_method'] ?? "cod",
+            'shipping_fee' => $request['shipping_fee'] ?? 0,
         ]);
 
         // Loop through products and create order details
         foreach ($validatedData['products'] as $product) {
+            $total = $product['price'] * $product['quantity'];
+
             OrderDetail::create([
                 'order_id' => $order->id,
                 'product_id' => $product['product_id'],
                 'variant_id' => $product['variant_id'],
                 'price' => $product['price'],
                 'quantity' => $product['quantity'],
+                'total' => $total,
             ]);
         }
 
